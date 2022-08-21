@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Sam&#39;s Archive</title>
-    <link>https://manson112.github.io/</link>
-    <description>Recent content on Sam&#39;s Archive</description>
+    <title>Spring on Sam&#39;s Archive</title>
+    <link>https://manson112.github.io/categories/spring/</link>
+    <description>Recent content in Spring on Sam&#39;s Archive</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Aug 2022 00:03:39 +0900</lastBuildDate><atom:link href="https://manson112.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 22 Aug 2022 00:03:39 +0900</lastBuildDate><atom:link href="https://manson112.github.io/categories/spring/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Springboot Mybatis 로 DB 연결하기 - 1</title>
       <link>https://manson112.github.io/post/springboot_mybatis_1/</link>
