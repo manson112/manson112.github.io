@@ -242,11 +242,11 @@
 <p>스프링부트 프로젝트는 <a href="https://start.spring.io">https://start.spring.io</a> 에 접속해서 필요한 정보들을 선택해서 생성하면 아주 쉽게 생성할 수 있다.</p>
 <p>나는 Gradle, Java(11), Springboot(2.7.3) 을 선택했다.</p>
 <p>Dependency로는 Lombok, Spring Web, 그리고 오늘 사용할 Mybatis Framework, 데이터베이스를 따로 설정하지 않고 메모리에서 동작하게 할 것이기 때문에 가벼운 H2 Database를 선택했다.</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_5.25.09_PM.png" alt="Screen Shot 2022-08-21 at 5.25.09 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_5.25.09_PM.png" alt="Screen Shot 2022-08-21 at 5.25.09 PM.png"></p>
 <p>이제 Generate를 클릭하고 압축을 푼 후에 IntelliJ 에서 열어주자</p>
 <h1 id="2-springboot-동작-확인">2. Springboot 동작 확인</h1>
 <p>Springboot를 한번 실행시켜 본다.</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_5.33.07_PM.png" alt="Screen Shot 2022-08-21 at 5.33.07 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_5.33.07_PM.png" alt="Screen Shot 2022-08-21 at 5.33.07 PM.png"></p>
 <h1 id="3-h2-console-설정">3. H2 Console 설정</h1>
 <p><a href="http://application.properties">application.properties</a> 파일을 열어 다음과 같이 적어준다</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">h2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">enabled</span><span style="color:#f92672">=</span><span style="color:#66d9ef">true</span> <span style="color:#75715e">// 콘솔을 활성화 시킨다
@@ -259,9 +259,9 @@
 </span></span><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">h2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">path</span><span style="color:#f92672">=/</span>h2<span style="color:#f92672">-</span>console <span style="color:#75715e">// 콘솔의 경로를 변경할 수 있다.
 </span></span></span></code></pre></div><p>저장 후 서버를 재실행 시킨다.</p>
 <p>브라우저를 열어 <a href="http://localhost:8080/h2-console">http://localhost:8080/h2-console</a> 로 접속하면 다음과 같은 화면을 확인할 수 있다.</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_6.23.36_PM.png" alt="Screen Shot 2022-08-21 at 6.23.36 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_6.23.36_PM.png" alt="Screen Shot 2022-08-21 at 6.23.36 PM.png"></p>
 <p>기본적으로 설정이 들어가 있는데, 위에서 같은 설정으로 서버를 실행했기 때문에 수정하지 않고 연결 버튼을 누르면, 다음과 같이 콘솔에 접속된다.</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_6.24.45_PM.png" alt="Screen Shot 2022-08-21 at 6.24.45 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_6.24.45_PM.png" alt="Screen Shot 2022-08-21 at 6.24.45 PM.png"></p>
 <h1 id="4-테이블-생성">4. 테이블 생성</h1>
 <p>이 포스트의 목적은 Springboot에서 Mybatis를 연결하여 database를 이용하는 것이기 때문에, 임시로 데이터를 넣어놓고 조회가 잘 되는지 확인할 것이다.</p>
 <p>가운데 있는 텍스트필드에 다음 명령들을 입력 후 실행시킨다.</p>
@@ -272,11 +272,11 @@
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name4&#39;</span>);
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name5&#39;</span>);
 </span></span></code></pre></div><p>성공 했다면 Select 쿼리를 날려 데이터가 잘 들어갔는지 확인해보자.</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_6.27.45_PM.png" alt="Screen Shot 2022-08-21 at 6.27.45 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_6.27.45_PM.png" alt="Screen Shot 2022-08-21 at 6.27.45 PM.png"></p>
 <h1 id="5-springboot에서-조회하기---mapper">5. Springboot에서 조회하기 - Mapper</h1>
 <p>데이터를 조회하기 위한 Controller, Entity, Mapper 를 작성한다.</p>
 <p>디렉토리 구조는 다음과 같다.</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_6.29.55_PM.png" alt="Screen Shot 2022-08-21 at 6.29.55 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_6.29.55_PM.png" alt="Screen Shot 2022-08-21 at 6.29.55 PM.png"></p>
 <p>일반적은 3계층 구조라면 Service도 필요하겠지만, 비즈니스 로직을 넣을 것이 아니기 때문에 생략했다.</p>
 <h3 id="mybatistestentityjava">MybatisTestEntity.java</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Getter</span>
@@ -322,10 +322,10 @@
 <p>@Param Annotation으로 쿼리 내부의 #{id} 필드에 파라미터를 매핑 해준다.</p>
 <h1 id="6-확인">6. 확인</h1>
 <p>저장하고 서버를 재실행 시킨 후 브라우저를 열어 <a href="http://localhost:8080">http://localhost:8080</a> 에 접속해보자</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_6.39.26_PM.png" alt="Screen Shot 2022-08-21 at 6.39.26 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_6.39.26_PM.png" alt="Screen Shot 2022-08-21 at 6.39.26 PM.png"></p>
 <p>테이블에 들어있는 데이터들이 모두 조회된다.</p>
 <p>다음은 <a href="http://localhost:8080/1">http://localhost:8080/1</a> 을 입력하여 id가 1인 데이터가 잘 조회 되는지 확인해보자</p>
-<p><img src="https://manson112.github.io/Screen_Shot_2022-08-21_at_6.41.38_PM.png" alt="Screen Shot 2022-08-21 at 6.41.38 PM.png"></p>
+<p><img src="Screen_Shot_2022-08-21_at_6.41.38_PM.png" alt="Screen Shot 2022-08-21 at 6.41.38 PM.png"></p>
 <p><a href="https://github.com/manson112/spring-mybatis-sample">GitHub - manson112/spring-mybatis-sample</a></p>
               
 
