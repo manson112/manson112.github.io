@@ -6,9 +6,18 @@
     <description>Recent content in Posts on Sam&#39;s Archive</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Mon, 22 Aug 2022 00:03:39 +0900</lastBuildDate><atom:link href="https://manson112.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Aug 2022 23:48:54 +0900</lastBuildDate><atom:link href="https://manson112.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Springboot Mybatis 로 DB 연결하기 - 1</title>
+      <title>Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리</title>
+      <link>https://manson112.github.io/post/springboot_mybatis_2/</link>
+      <pubDate>Tue, 23 Aug 2022 23:48:54 +0900</pubDate>
+      
+      <guid>https://manson112.github.io/post/springboot_mybatis_2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface</title>
       <link>https://manson112.github.io/post/springboot_mybatis_1/</link>
       <pubDate>Mon, 22 Aug 2022 00:03:39 +0900</pubDate>
       

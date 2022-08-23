@@ -17,7 +17,7 @@
   },
   "name":"Sam\u0027s Archive",
   "description":"",
-  "url":"https:\/\/manson112.github.io\/post\/springboot_mybatis_1\/",
+  "url":"https:\/\/manson112.github.io\/post\/springboot_mybatis_2\/",
   "keywords":"[tech]"
 }
 
@@ -33,20 +33,20 @@
 
 <meta property="og:description" content="">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface">
-<meta name="twitter:title" content="Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface">
-<meta property="og:url" content="https://manson112.github.io/post/springboot_mybatis_1/">
-<meta property="twitter:url" content="https://manson112.github.io/post/springboot_mybatis_1/">
+<meta property="og:title" content="Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리">
+<meta name="twitter:title" content="Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리">
+<meta property="og:url" content="https://manson112.github.io/post/springboot_mybatis_2/">
+<meta property="twitter:url" content="https://manson112.github.io/post/springboot_mybatis_2/">
 <meta property="og:site_name" content="Sam&#39;s Archive">
 <meta property="og:description" content="">
 <meta name="twitter:description" content="">
 <meta property="og:locale" content="ko-kr">
 
   
-    <meta property="article:published_time" content="2022-08-22T00:03:39">
+    <meta property="article:published_time" content="2022-08-23T23:48:54">
   
   
-    <meta property="article:modified_time" content="2022-08-22T00:03:39">
+    <meta property="article:modified_time" content="2022-08-23T23:48:54">
   
   
   
@@ -73,14 +73,14 @@
 
 
 
-    <title>Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface</title>
+    <title>Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리</title>
 
     <link rel="icon" href="https://manson112.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://manson112.github.io/post/springboot_mybatis_1/">
+    <link rel="canonical" href="https://manson112.github.io/post/springboot_mybatis_2/">
 
     
     <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanumgothic.css">
@@ -216,15 +216,15 @@
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title">
-      Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface
+      Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time datetime="2022-08-22T00:03:39&#43;09:00">
+      <time datetime="2022-08-23T23:48:54&#43;09:00">
         
-   22, 2022
+   23, 2022
 
       </time>
     
@@ -243,78 +243,33 @@
           
           <div class="post-content markdown">
             <div class="main-content-wrap">
-              <p>Spring에 Mybatis를 연동 방법을 알아보자. 의외로 매우 간단하다.</p>
-<h1 id="1-springboot-프로젝트-생성">1. Springboot 프로젝트 생성</h1>
-<p>스프링부트 프로젝트는 <a href="https://start.spring.io">https://start.spring.io</a> 에 접속해서 필요한 정보들을 선택해서 생성하면 아주 쉽게 생성할 수 있다.</p>
-<p>나는 Gradle, Java(11), Springboot(2.7.3) 을 선택했다.</p>
-<p>Dependency로는 Lombok, Spring Web, 그리고 오늘 사용할 Mybatis Framework, 데이터베이스를 따로 설정하지 않고 메모리에서 동작하게 할 것이기 때문에 가벼운 H2 Database를 선택했다.</p>
-<p><img src="./Screen_Shot_2022-08-21_at_5.25.09_PM.png" alt="Screen Shot 2022-08-21 at 5.25.09 PM.png"></p>
-<p>이제 Generate를 클릭하고 압축을 푼 후에 IntelliJ 에서 열어주자</p>
-<h1 id="2-springboot-동작-확인">2. Springboot 동작 확인</h1>
-<p>Springboot를 한번 실행시켜 본다.</p>
-<p><img src="./Screen_Shot_2022-08-21_at_5.33.07_PM.png" alt="Screen Shot 2022-08-21 at 5.33.07 PM.png"></p>
-<h1 id="3-h2-console-설정">3. H2 Console 설정</h1>
-<p><a href="http://application.properties">application.properties</a> 파일을 열어 다음과 같이 적어준다</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">h2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">enabled</span><span style="color:#f92672">=</span><span style="color:#66d9ef">true</span> <span style="color:#75715e">// 콘솔을 활성화 시킨다
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 다음은 h2-console이 실행될때의 기본설정이다
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">datasource</span><span style="color:#f92672">.</span><span style="color:#a6e22e">url</span><span style="color:#f92672">=</span>jdbc<span style="color:#f92672">:</span>h2<span style="color:#f92672">:~/</span>test<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">datasource</span><span style="color:#f92672">.</span><span style="color:#a6e22e">driverClassName</span><span style="color:#f92672">=</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">h2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Driver</span>
-</span></span><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">datasource</span><span style="color:#f92672">.</span><span style="color:#a6e22e">username</span><span style="color:#f92672">=</span>sa
-</span></span><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">datasource</span><span style="color:#f92672">.</span><span style="color:#a6e22e">password</span><span style="color:#f92672">=</span>  <span style="color:#75715e">// 입력하지 않아도 된다.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>spring<span style="color:#f92672">.</span><span style="color:#a6e22e">h2</span><span style="color:#f92672">.</span><span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">path</span><span style="color:#f92672">=/</span>h2<span style="color:#f92672">-</span>console <span style="color:#75715e">// 콘솔의 경로를 변경할 수 있다.
-</span></span></span></code></pre></div><p>저장 후 서버를 재실행 시킨다.</p>
-<p>브라우저를 열어 <a href="http://localhost:8080/h2-console">http://localhost:8080/h2-console</a> 로 접속하면 다음과 같은 화면을 확인할 수 있다.</p>
-<p><img src="./Screen_Shot_2022-08-21_at_6.23.36_PM.png" alt="Screen Shot 2022-08-21 at 6.23.36 PM.png"></p>
-<p>기본적으로 설정이 들어가 있는데, 위에서 같은 설정으로 서버를 실행했기 때문에 수정하지 않고 연결 버튼을 누르면, 다음과 같이 콘솔에 접속된다.</p>
-<p><img src="./Screen_Shot_2022-08-21_at_6.24.45_PM.png" alt="Screen Shot 2022-08-21 at 6.24.45 PM.png"></p>
-<h1 id="4-테이블-생성">4. 테이블 생성</h1>
-<p>이 포스트의 목적은 Springboot에서 Mybatis를 연결하여 database를 이용하는 것이기 때문에, 임시로 데이터를 넣어놓고 조회가 잘 되는지 확인할 것이다.</p>
-<p>가운데 있는 텍스트필드에 다음 명령들을 입력 후 실행시킨다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> tb_mybatis_test (id int <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span> auto_increment, name varchar(<span style="color:#ae81ff">255</span>)); 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name1&#39;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name2&#39;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name3&#39;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name4&#39;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> tb_mybatis_test (name) <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;name5&#39;</span>);
-</span></span></code></pre></div><p>성공 했다면 Select 쿼리를 날려 데이터가 잘 들어갔는지 확인해보자.</p>
-<p><img src="./Screen_Shot_2022-08-21_at_6.27.45_PM.png" alt="Screen Shot 2022-08-21 at 6.27.45 PM.png"></p>
-<h1 id="5-springboot에서-조회하기---mapper">5. Springboot에서 조회하기 - Mapper</h1>
-<p>데이터를 조회하기 위한 Controller, Entity, Mapper 를 작성한다.</p>
-<p>디렉토리 구조는 다음과 같다.</p>
-<p><img src="./Screen_Shot_2022-08-21_at_6.29.55_PM.png" alt="Screen Shot 2022-08-21 at 6.29.55 PM.png"></p>
-<p>일반적은 3계층 구조라면 Service도 필요하겠지만, 비즈니스 로직을 넣을 것이 아니기 때문에 생략했다.</p>
-<h3 id="mybatistestentityjava">MybatisTestEntity.java</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Getter</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MybatisTestEntity</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String id<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
+              <p><a href="https://manson112.github.io/post/springboot_mybatis_1/">1편</a>에서는 Springboot 프로젝트를 만들고 @Mapper Annotation을 이용해서 SQL을 실행했다.</p>
+<p>하지만 이 방법은 쿼리가 길어지거나 복잡해지면 상당히 불편해진다.</p>
+<p>따라서 프로젝트에서 Mybatis를 사용한다면 주로 xml 파일을 따로 분리해서 쿼리를 호출 한다.</p>
+<h1 id="1-applicationproperties-에-설정-추가">1. application.properties 에 설정 추가</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>mybatis.mapper-locations=classpath:/sql/xml/sql-*.xml
+</span></span></code></pre></div><p>XML파일로 만들어 둘 Mybatis mapper의 위치를 지정해주는 설정이다.</p>
+<h1 id="2-mapper-xml-작성">2. Mapper xml 작성</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE mapper PUBLIC &#34;-//mybatis.org//DTD Mapper 3.0//EN&#34; &#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Builder</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MybatisTestEntity</span><span style="color:#f92672">(</span>String id<span style="color:#f92672">,</span> String name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> id<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> name<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><h3 id="indexcontrollerjava">IndexController.java</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequiredArgsConstructor</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">IndexController</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> TestMybatisMapper testMybatisMapper<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">namespace=</span><span style="color:#e6db74">&#34;manson112.github.springmybatis.app.mapper.TestMybatisMapper&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;select</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;findAllXml&#34;</span> <span style="color:#a6e22e">resultType=</span><span style="color:#e6db74">&#34;manson112.github.springmybatis.app.domain.MybatisTestEntity&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        select *
+</span></span><span style="display:flex;"><span>          from tb_mybatis_test
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/select&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>MybatisTestEntity<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span> <span style="color:#75715e">// 전체 목록을 조회
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> testMybatisMapper<span style="color:#f92672">.</span><span style="color:#a6e22e">findAll</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;select</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;findByIdXml&#34;</span> <span style="color:#a6e22e">parameterType=</span><span style="color:#e6db74">&#34;String&#34;</span> <span style="color:#a6e22e">resultType=</span><span style="color:#e6db74">&#34;manson112.github.springmybatis.app.domain.MybatisTestEntity&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        select *
+</span></span><span style="display:flex;"><span>          from tb_mybatis_test
+</span></span><span style="display:flex;"><span>         where id = #{id}
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/select&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/{id}&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> MybatisTestEntity <span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span> String id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> testMybatisMapper<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><p>@RestController: @ResponseBody 어노테이션을 붙이지 않아도 문자열과 JSON 등을 전송할 수 있다.</p>
-<p>@RequiredArgsConstructor:클래스 필드 중 final로 선언되거나, @NotNull 이 붙은 필드를 주입받는 Constructor를 생성한다.</p>
-<h3 id="testmybatismapperjava">TestMybatisMapper.java</h3>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/mapper&gt;</span>
+</span></span></code></pre></div><p>mapper 태그의 namespace를 @Mapper Annotation이 선언되어있는 Interface로 입력한다.</p>
+<p>parameterType과 resultType을 작성해서 쿼리에 사용될 파라미터, 리턴될 객체의 타입을 지정해준다.</p>
+<p>타입은 기본적으로 전체 패키지로 작성해야하지만, mybatis configuration 파일을 사용해서 alias를 줄 수있다.</p>
+<h1 id="3-interface에-메서드-추가">3. Interface에 메서드 추가</h1>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Mapper</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">TestMybatisMapper</span> <span style="color:#f92672">{</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Select</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select * from tb_mybatis_test&#34;</span><span style="color:#f92672">)</span>
@@ -323,15 +278,44 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Select</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;select * from tb_mybatis_test where id=#{id}&#34;</span><span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> MybatisTestEntity <span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> String id<span style="color:#f92672">);</span>
 </span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 추가된 메서드
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>MybatisTestEntity<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAllXml</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> MybatisTestEntity <span style="color:#a6e22e">findByIdXml</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">)</span> String id<span style="color:#f92672">);</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><p>Mapper가 Interface 인 것을 유의하자. 사용할 SQL을 Annotation으로 각각 메서드 위에 작성해준다.</p>
-<p>@Param Annotation으로 쿼리 내부의 #{id} 필드에 파라미터를 매핑 해준다.</p>
-<h1 id="6-확인">6. 확인</h1>
-<p>저장하고 서버를 재실행 시킨 후 브라우저를 열어 <a href="http://localhost:8080">http://localhost:8080</a> 에 접속해보자</p>
-<p><img src="./Screen_Shot_2022-08-21_at_6.39.26_PM.png" alt="Screen Shot 2022-08-21 at 6.39.26 PM.png"></p>
-<p>테이블에 들어있는 데이터들이 모두 조회된다.</p>
-<p>다음은 <a href="http://localhost:8080/1">http://localhost:8080/1</a> 을 입력하여 id가 1인 데이터가 잘 조회 되는지 확인해보자</p>
-<p><img src="./Screen_Shot_2022-08-21_at_6.41.38_PM.png" alt="Screen Shot 2022-08-21 at 6.41.38 PM.png"></p>
+</span></span></code></pre></div><p>이 때, xml 파일의 select문 id와 메서드명을 일치시켜준다.</p>
+<h1 id="4-controller-메서드-추가">4. Controller 메서드 추가</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequiredArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">IndexController</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> TestMybatisMapper testMybatisMapper<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>MybatisTestEntity<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAll</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> testMybatisMapper<span style="color:#f92672">.</span><span style="color:#a6e22e">findAll</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/entity/{id}&#34;</span><span style="color:#f92672">)</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> MybatisTestEntity <span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span> String id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> testMybatisMapper<span style="color:#f92672">.</span><span style="color:#a6e22e">findById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/xml&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>MybatisTestEntity<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findAllXml</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> testMybatisMapper<span style="color:#f92672">.</span><span style="color:#a6e22e">findAllXml</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/entity/xml/{id}&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> MybatisTestEntity <span style="color:#a6e22e">findByIdXml</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathVariable</span> String id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> testMybatisMapper<span style="color:#f92672">.</span><span style="color:#a6e22e">findByIdXml</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>추가된 각각의 메서드를 호출하는 get api를 추가작성한다.</p>
+<h1 id="5-확인">5. 확인</h1>
+<p>서버를 실행시켜 결과를 확인한다.</p>
+<p><img src="./Screen_Shot_2022-08-23_at_11.43.51_PM.png" alt="Screen Shot 2022-08-23 at 11.43.51 PM.png"></p>
+<p><img src="./Screen_Shot_2022-08-23_at_11.44.07_PM.png" alt="Screen Shot 2022-08-23 at 11.44.07 PM.png"></p>
+<p>3편에서는 이 게시글을 작성하면서 진짜 하고싶었던 부분에 대해 작성해보려한다.</p>
 <p><a href="https://github.com/manson112/spring-mybatis-sample">GitHub - manson112/spring-mybatis-sample</a></p>
               
 
@@ -349,7 +333,7 @@
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://manson112.github.io/post/springboot_mybatis_2/" data-tooltip="Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리" aria-label=": Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml"></span>
@@ -357,7 +341,7 @@
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://manson112.github.io/post/springboot_mybatis_1/" data-tooltip="Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface" aria-label=": Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface">
           
               <span class="hide-xs hide-sm text-small icon-mr"></span>
               <i class="fa fa-angle-right"></i>
@@ -375,19 +359,19 @@
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://manson112.github.io/post/springboot_mybatis_1/" title="" aria-label="">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://manson112.github.io/post/springboot_mybatis_2/" title="" aria-label="">
           <i class="fab fa-facebook-square" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://manson112.github.io/post/springboot_mybatis_1/" title="" aria-label="">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://manson112.github.io/post/springboot_mybatis_2/" title="" aria-label="">
           <i class="fab fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://manson112.github.io/post/springboot_mybatis_1/" title="" aria-label="">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://manson112.github.io/post/springboot_mybatis_2/" title="" aria-label="">
           <i class="fab fa-linkedin" aria-hidden="true"></i>
         </a>
       </li>
@@ -444,7 +428,7 @@
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://manson112.github.io/post/springboot_mybatis_2/" data-tooltip="Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리" aria-label=": Springboot Mybatis 로 DB 연결하기 - 2 XML파일로 SQL 분리">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml"></span>
@@ -452,7 +436,7 @@
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://manson112.github.io/post/springboot_mybatis_1/" data-tooltip="Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface" aria-label=": Springboot Mybatis 로 DB 연결하기 - 1 @Mapper Interface">
           
               <span class="hide-xs hide-sm text-small icon-mr"></span>
               <i class="fa fa-angle-right"></i>
@@ -470,19 +454,19 @@
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://manson112.github.io/post/springboot_mybatis_1/" title="" aria-label="">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://manson112.github.io/post/springboot_mybatis_2/" title="" aria-label="">
           <i class="fab fa-facebook-square" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://manson112.github.io/post/springboot_mybatis_1/" title="" aria-label="">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://manson112.github.io/post/springboot_mybatis_2/" title="" aria-label="">
           <i class="fab fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://manson112.github.io/post/springboot_mybatis_1/" title="" aria-label="">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://manson112.github.io/post/springboot_mybatis_2/" title="" aria-label="">
           <i class="fab fa-linkedin" aria-hidden="true"></i>
         </a>
       </li>
@@ -513,19 +497,19 @@
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmanson112.github.io%2Fpost%2Fspringboot_mybatis_1%2F" aria-label="">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmanson112.github.io%2Fpost%2Fspringboot_mybatis_2%2F" aria-label="">
           <i class="fab fa-facebook-square" aria-hidden="true"></i><span></span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fmanson112.github.io%2Fpost%2Fspringboot_mybatis_1%2F" aria-label="">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fmanson112.github.io%2Fpost%2Fspringboot_mybatis_2%2F" aria-label="">
           <i class="fab fa-twitter" aria-hidden="true"></i><span></span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmanson112.github.io%2Fpost%2Fspringboot_mybatis_1%2F" aria-label="">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmanson112.github.io%2Fpost%2Fspringboot_mybatis_2%2F" aria-label="">
           <i class="fab fa-linkedin" aria-hidden="true"></i><span></span>
         </a>
       </li>
